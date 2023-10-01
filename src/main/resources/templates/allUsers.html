@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Список пользователей</title>
+</head>
+<body>
+<h2>Пользователи</h2>
+<a th:href="@{/logout}">Выход</a>
+<a th:href="@{/admin/newUserForm}">Добавить пользователя</a>
+<table border="1">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Имя</th>
+        <th>Фамилия</th>
+        <th>Возраст</th>
+        <th>Роли</th>
+        <th>Редактировать</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="user :${userList}">
+        <td th:text="${user.id}"></td>
+        <td th:text="${user.name}"></td>
+        <td th:text="${user.lastName}"></td>
+        <td th:text="${user.age}"></td>
+        <td>
+            <a th:each="roles: ${user.getAuthorities()}" th:text="${roles.getAuthority()} "></a>
+        </td>
+        <td>
+            <a th:href="@{/admin/updateUser(id=${user.id})}">Обновить</a>
+            <a th:href="@{/admin/delete(id=${user.id})}" th:onclick="return confirm('Вы уверены ?')">Удалить</a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>
