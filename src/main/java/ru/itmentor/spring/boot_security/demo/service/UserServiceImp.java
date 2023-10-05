@@ -6,7 +6,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.itmentor.spring.boot_security.demo.DAO.UserDAO;
+import ru.itmentor.spring.boot_security.demo.Repository.UserRepository;
 import ru.itmentor.spring.boot_security.demo.model.User;
 import java.util.List;
 
@@ -14,40 +14,41 @@ import java.util.List;
 @Transactional
 public class UserServiceImp implements UserService, UserDetailsService {
 
-    private final UserDAO userDAO;
+    private final UserRepository userRepository;
 
     @Autowired
-    public UserServiceImp(UserDAO userDAO) {
-        this.userDAO = userDAO;
+    public UserServiceImp(UserRepository userRepository) {
+        this.userRepository = userRepository;
     }
 
     @Override
     public List<User> findAll() {
-        return userDAO.findAll();
+        return userRepository.findAll();
     }
 
     @Override
-    public User getUserById(long id) {
-        return userDAO.getUserById(id);
+    public User findUserById(long id) {
+        return userRepository.findById(id).orElse(null);
     }
 
     @Override
     public void save(User user) {
-        userDAO.save(user);
+        userRepository.save(user);
     }
 
     @Override
     public void update(User user) {
-        userDAO.update(user);
+        userRepository.save(user);
     }
 
     @Override
     public void delete(long id) {
-        userDAO.delete(id);
+        userRepository.deleteById(id);
     }
 
     @Override
-    public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
-        return userDAO.findByName(userName);
+    public UserDetails loadUserByUsername(String userName) {
+
+        return userRepository.findUserByName(userName).orElseThrow(()-> new UsernameNotFoundException("User not found"));
     }
 }

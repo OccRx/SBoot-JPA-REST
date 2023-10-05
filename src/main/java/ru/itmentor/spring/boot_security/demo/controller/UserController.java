@@ -20,7 +20,7 @@ public class UserController {
 
     @GetMapping("")
     public String thisUser(@AuthenticationPrincipal User user, Model model){
-        User thisUser = userService.getUserById(user.getId());
+        User thisUser = userService.findUserById(user.getId());
         model.addAttribute("thisUser", thisUser);
         return "thisUser";
     }
